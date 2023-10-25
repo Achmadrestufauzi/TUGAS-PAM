@@ -1,69 +1,51 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
 void main() {
-  runApp(MyApp());
+runApp(MaterialApp(
+home: MyApp(),
+));
 }
-
-class MyApp extends StatefulWidget {
-  @override
-  _MyAppState createState() => _MyAppState();
+// ignore: use_key_in_widget_constructors
+class MyApp extends StatelessWidget {
+final String apiUrl = "http://localhost/api/data.json";
+Future<List<dynamic>> _fecthData() async {
+var result = await http.get(Uri.parse(apiUrl));
+return json.decode(result.body)['data'];
 }
-
-class _MyAppState extends State<MyApp> {
-  List<Map<String, dynamic>> data = [];
-
-  @override
-  void initState() {
-    super.initState();
-    fetchData();
-  }
-
-  Future<void> fetchData() async {
-    final apiUrl =
-        "http://localhost/tugas_flutter3/api.php"; // Ganti dengan URL API PHP Anda
-
-    final response = await http.get(Uri.parse(apiUrl));
-
-    if (response.statusCode == 200) {
-      final ready = json.decode(response.body);
-      setState(() {
-        data = List<Map<String, dynamic>>.from(ready);
-        print(data);
-      });
-    } else {
-      print("Gagal mengambil data dari API.");
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('ACHMAD RESTU FAUZI'),
-        ),
-        body: Center(
-          child: data.isNotEmpty
-              ? ListView.builder(
-                  itemCount: data.length,
-                  itemBuilder: (context, index) {
-                    final item = data[index];
-                    return Column(
-                      children: <Widget>[
-                        Image.network(item["kendaraan"]),
-                        Text(item[
-                            "sopir"]),
-                            // Ganti engan nama kolom yang sesuai
-                        // Tambahkan tampilan lainnya sesuai kebutuhan
-                      ],
-                    );
-                  },
-                )
-              : CircularProgressIndicator(),
-        ),
-      ),
-    );
-  }
+@override
+Widget build(BuildContext context) {
+return Scaffold(
+appBar: AppBar(
+title: Text('ACHMAD RESTU FAUZI'),
+),
+body: Container(
+child: FutureBuilder<List<dynamic>>(
+future: _fecthData(),
+builder: (BuildContext context, AsyncSnapshot snapshot) {
+if (snapshot.hasData) {
+return ListView.builder(
+padding: EdgeInsets.all(10),
+itemCount: snapshot.data.length,
+itemBuilder: (BuildContext context, int index) {
+return ListTile(
+leading: CircleAvatar(
+radius: 30,
+backgroundImage:
+NetworkImage(snapshot.data[index]['avatar']),
+),
+title: Text(snapshot.data[index]['first_name'] +
+" " +
+snapshot.data[index]['last_name']),
+subtitle: Text(snapshot.data[index]['produk']),
+);
+});
+} else {
+return Center(child: CircularProgressIndicator());
+}
+},
+),
+),
+);
+}
 }

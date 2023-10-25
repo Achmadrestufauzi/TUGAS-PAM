@@ -1,0 +1,4 @@
+{"page":1,"per_page":3,"total":12,"total_pages":4,"data":[{"id":1,"produk":"MotorSport","first_name":"Ducati","last_name":"","avatar":"http://localhost/api/img/download.jpg"},
+{"id":2,"produk":"MotorSport","first_name":"Ahh","last_name":"Joss","avatar":"http://localhost/api/img/download(1).jpg"},
+{"id":3,"produk":"MotorSport","first_name":"RasaMantap","last_name":"Joss","avatar":"http://localhost/api/img/download(2).jpg"}],
+"support":{"url":"https://reqres.in/#support-heading","text":"To keepReqRes free, contributions towards server costs are appreciated!"}}
